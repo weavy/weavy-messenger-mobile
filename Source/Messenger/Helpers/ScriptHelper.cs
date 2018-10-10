@@ -90,7 +90,7 @@ weavyAppScripts.badge = (function(){
     var check = function(){
         
         $.ajax('/api/conversations/unread?followed=true').then(function(response){
-            var count = response.data.length;
+            var count = response.data != null ? response.data.length : 0;
                    
             Native('badgeCallback', count);
         });        
