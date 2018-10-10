@@ -62,13 +62,11 @@ namespace Messenger {
             };
 
             // the layout
-            var layout = new StackLayout {
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                Children = { _webview }
-            };
-            Padding = new Thickness(0, 50);
-            Content = layout;
+            if (Device.RuntimePlatform == Device.iOS) {
+                Padding = new Thickness(0, 50);
+            }
+
+            Content = _webview;
         }
 
 
