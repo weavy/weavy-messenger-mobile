@@ -20,12 +20,12 @@ namespace Messenger {
         /// </summary>
         /// <param name="url">The url to use. When a notification is received on Android, this is set to the notification url</param>
         public MainPage(string url = "") {
-                        
+
             // create a new hybrid webview
             _webview = new HybridWebView(new JsonSerializer()) {
                 Uri = ResolveUrl(url),
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand                
+                VerticalOptions = LayoutOptions.FillAndExpand
             };
 
             // resume event
@@ -60,10 +60,15 @@ namespace Messenger {
 
                 }
             };
-            
 
-            // set the content
-            Content = _webview;
+            // the layout
+            var layout = new StackLayout {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                Children = { _webview }
+            };
+            Padding = new Thickness(0, 50);
+            Content = layout;
         }
 
 
@@ -112,7 +117,7 @@ namespace Messenger {
                 Device.BeginInvokeOnMainThread(() => {
                     _webview.InjectJavaScript(ScriptHelper.Scripts);
                 });
-                
+
             });
 
             // Callback for registration to Azure Notification Hub
@@ -154,7 +159,7 @@ namespace Messenger {
 
                 Task.Run(() => {
                     DependencyService.Get<IApplicationBadge>().SetBadge(badge);
-                });               
+                });
             });
 
             // callback for theming
@@ -162,9 +167,9 @@ namespace Messenger {
                 var themeColor = CrossSettings.Current.Get<string>("themecolor");
 
                 // update theme color if different
-                if(color != themeColor) {
+                if (color != themeColor) {
                     SetThemeColor(color);
-                }                
+                }
             });
 
             //Callback from external links script
@@ -180,7 +185,7 @@ namespace Messenger {
         /// <returns></returns>
         private string ResolveUrl(string url) {
 
-            if (string.IsNullOrEmpty(url)) {                
+            if (string.IsNullOrEmpty(url)) {
                 url = CrossSettings.Current.Get<string>("url");
             }
 

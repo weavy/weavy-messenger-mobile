@@ -3,6 +3,7 @@ using System;
 using Messenger.Helpers;
 using Messenger.Interfaces;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Messenger.Controls {
     /// <summary>
@@ -10,14 +11,21 @@ namespace Messenger.Controls {
     /// </summary>
     public class WeavyPage : ContentPage {
         public EventHandler NotificationReceived;
-                
+
         /// <summary>
         /// When view appears
         /// </summary>
         protected override void OnAppearing() {
             base.OnAppearing();
 
-            // set theme color
+            // set iOS padding
+            if (Device.RuntimePlatform == Device.iOS) {
+                var safeArea = On<Xamarin.Forms.PlatformConfiguration.iOS>().SafeAreaInsets();
+                safeArea.Bottom = 0;
+                Padding = safeArea;
+            }
+
+            // set theme color   
             var color = CrossSettings.Current.Get<string>("themecolor") ?? Constants.DefaultColor;
             SetThemeColor(color);
         }
@@ -39,14 +47,18 @@ namespace Messenger.Controls {
         /// </summary>
         /// <param name="color">The hex color to use</param>
         protected void SetThemeColor(string color) {
-            INavigationBarColor nav = DependencyService.Get<INavigationBarColor>();
-            
-            // update theme color            
+            // update theme color 
             CrossSettings.Current.Set<string>("themecolor", color);
+
+            if (Device.RuntimePlatform == Device.iOS) {
+                BackgroundColor = Color.FromHex(color);
+            }
+
+            INavigationBarColor nav = DependencyService.Get<INavigationBarColor>();
 
             Device.BeginInvokeOnMainThread(() => {
                 nav.SetStatusBarColor(color);
-            });            
+            });
         }
     }
 
