@@ -12,13 +12,13 @@ namespace Messenger.Droid.Notifications {
     [Service]
     [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
     public class FirebaseNotificationService : FirebaseMessagingService {
-        
+
         /// <summary>
         /// A notification is received
         /// </summary>
         /// <param name="message"></param>
         public override void OnMessageReceived(RemoteMessage message) {
-    
+
             // Pull message body out of the template
             var messageBody = message.Data["message"];
             var url = message.Data["url"];
@@ -27,7 +27,10 @@ namespace Messenger.Droid.Notifications {
             if (string.IsNullOrWhiteSpace(messageBody))
                 return;
 
-            DisplayNotification(messageBody, url);
+            if (!AppInForeground()) {
+                DisplayNotification(messageBody, url);
+            }
+
         }
 
         /// <summary>
@@ -58,7 +61,7 @@ namespace Messenger.Droid.Notifications {
                            .SetPriority((int)NotificationPriority.High)
                            .SetDefaults((int)NotificationDefaults.Vibrate)
                            .SetAutoCancel(true)
-                           .SetVisibility((int)NotificationVisibility.Public)                           
+                           .SetVisibility((int)NotificationVisibility.Public)
                            .SetContentIntent(pendingIntent);
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.From(this);
@@ -87,11 +90,33 @@ namespace Messenger.Droid.Notifications {
 
                 notificationManager.Notify(SUMMARY_ID, summaryNotification.Build());
             }
+        }
 
-           
+        /// <summary>
+        /// Check if app is in foreground
+        /// </summary>
+        /// <returns></returns>
+        private bool AppInForeground() {
+            var context = Application.Context;
 
-            
-            
+            KeyguardManager km = (KeyguardManager)context.GetSystemService(Context.KeyguardService);
+            if (!km.InKeyguardRestrictedInputMode()) {
+
+                var activityManager = (ActivityManager)context.GetSystemService(Context.ActivityService);
+                var appProcesses = activityManager.RunningAppProcesses;
+                if (appProcesses == null) {
+                    return false;
+                }
+
+                var packageName = context.PackageName;
+                foreach (ActivityManager.RunningAppProcessInfo appProcess in appProcesses) {
+                    if (appProcess.Importance == Importance.Foreground && appProcess.ProcessName == packageName) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }
