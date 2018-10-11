@@ -21,7 +21,10 @@ namespace Messenger.Droid.WebView {
             HybridWebViewRenderer hybridRenderer;
 
             if (hybridWebViewRenderer != null && hybridWebViewRenderer.TryGetTarget(out hybridRenderer)) {
-                hybridRenderer.Element.MessageReceived(data);
+                if (hybridRenderer != null && hybridRenderer.Element != null) {
+                    hybridRenderer.Element.MessageReceived(data);
+                }
+
             }
         }
     }

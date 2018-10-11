@@ -13,6 +13,7 @@ namespace Messenger.Droid.WebView {
     /// Custom implementation of a WebViewClient
     /// </summary>
     public class HybridWebViewClient : WebViewClient {
+        private const string INTERNET_DISCONNECTED = "net::ERR_INTERNET_DISCONNECTED";
         protected readonly WeakReference<HybridWebViewRenderer> WebHybrid;
 
         public HybridWebViewClient(HybridWebViewRenderer webHybrid) {
@@ -54,7 +55,10 @@ namespace Messenger.Droid.WebView {
 
             HybridWebViewRenderer hybrid;
             if (this.WebHybrid != null && this.WebHybrid.TryGetTarget(out hybrid)) {
-                hybrid.OnError(error.ErrorCode, error.Description);
+
+                if (!error.Description.Equals(INTERNET_DISCONNECTED)) {
+                    hybrid.OnError(error.ErrorCode, error.Description);
+                }
             }
         }
 
