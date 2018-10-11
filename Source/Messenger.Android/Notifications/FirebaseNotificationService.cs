@@ -46,7 +46,7 @@ namespace Messenger.Droid.Notifications {
             intent.PutExtra("url", url);
 
             intent.AddFlags(ActivityFlags.ClearTop);
-            var pendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.OneShot);
+            var pendingIntent = PendingIntent.GetActivity(this, DateTime.Now.Millisecond, intent, PendingIntentFlags.OneShot);
 
             // custom notification sound
             string pathToPushSound = $"android.resource://{ApplicationContext.PackageName}/raw/{Resource.Raw.notification}";
