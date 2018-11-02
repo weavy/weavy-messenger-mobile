@@ -48,16 +48,15 @@ namespace Messenger {
             // handle webview errors
             _webview.LoadError += async (sender, args) => {
 
-                var retry = await DisplayAlert("Connection error", $"The {Constants.DisplayShortName} site could not be loaded", "Retry", $"Select another {Constants.DisplayShortName} site");
-                if (retry) {
-                    _webview.Uri = ResolveUrl(url);
-                } else {
+                var select = await DisplayAlert("Connection error", $"The {Constants.DisplayShortName} site could not be loaded", $"Select another {Constants.DisplayShortName} site", "Retry");
+                if (select) {
                     CrossSettings.Current.Remove("userguid");
                     CrossSettings.Current.Remove("url");
                     CrossSettings.Current.Remove("theme");
 
                     SelectSite();
-
+                } else {
+                    _webview.Uri = ResolveUrl(url);
                 }
             };
 

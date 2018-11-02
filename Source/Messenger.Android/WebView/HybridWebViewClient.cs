@@ -14,6 +14,7 @@ namespace Messenger.Droid.WebView {
     /// </summary>
     public class HybridWebViewClient : WebViewClient {
         private const string INTERNET_DISCONNECTED = "net::ERR_INTERNET_DISCONNECTED";
+        private const string CONNECTION_ABORTED = "net::ERR_CONNECTION_ABORTED";
         protected readonly WeakReference<HybridWebViewRenderer> WebHybrid;
 
         public HybridWebViewClient(HybridWebViewRenderer webHybrid) {
@@ -50,13 +51,19 @@ namespace Messenger.Droid.WebView {
             }
         }
 
+        /// <summary>
+        /// Handle errors in web view
+        /// </summary>
+        /// <param name="view"></param>
+        /// <param name="request"></param>
+        /// <param name="error"></param>
         public override void OnReceivedError(Android.Webkit.WebView view, IWebResourceRequest request, WebResourceError error) {
             base.OnReceivedError(view, request, error);
 
             HybridWebViewRenderer hybrid;
             if (this.WebHybrid != null && this.WebHybrid.TryGetTarget(out hybrid)) {
 
-                if (!error.Description.Equals(INTERNET_DISCONNECTED)) {
+                if (!error.Description.Equals(INTERNET_DISCONNECTED) && !error.Description.Equals(CONNECTION_ABORTED)) {
                     hybrid.OnError(error.ErrorCode, error.Description);
                 }
             }
