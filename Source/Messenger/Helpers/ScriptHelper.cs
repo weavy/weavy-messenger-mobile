@@ -83,7 +83,7 @@ weavyAppScripts.push = (function(){
 /* Handle badge changes                     */
 /********************************************/
 weavyAppScripts.badge = (function(){    
-    weavy.realtime.on('badge', function(e, data){
+    weavy.realtime.on('badge.weavy', function(e, data){
         Native('badgeCallback', data.conversations);
     });
 
