@@ -19,9 +19,9 @@ if(typeof weavyAppScripts === 'undefined') {
 /* Reconnect to weavy rtm or reload page      */
 /********************************************/
 try{ 
-    if(!weavy.connection.status || weavy.connection.status() === 4) {
-        weavy.connection.connect(); 
-        weavy.messenger.refresh(); 
+    if(!wvy.connection.status || wvy.connection.status() === 4) {
+        wvy.connection.connect(); 
+        wvy.messenger.refresh(); 
     }
 } catch(e){}
 ";
@@ -83,7 +83,7 @@ weavyAppScripts.push = (function(){
 /* Handle badge changes                     */
 /********************************************/
 weavyAppScripts.badge = (function(){    
-    weavy.realtime.on('badge.weavy', function(e, data){
+    wvy.realtime.on('badge.weavy', function(e, data){
         Native('badgeCallback', data.conversations);
     });
 
