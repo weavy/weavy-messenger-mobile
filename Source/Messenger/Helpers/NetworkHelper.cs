@@ -27,7 +27,7 @@ namespace Messenger.Helpers {
         /// <returns><c>true</c> if the site is reachable</returns>
         public async Task<bool> IsReachable(string uri) {
 
-            const string resource = "/api/status";
+            const string resource = "/a/status";
 
             var client = new RestClient() { BaseUrl = new Uri(uri) };
 
