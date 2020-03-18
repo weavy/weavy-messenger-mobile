@@ -1,3 +1,5 @@
+# Deprecated! Use https://github.com/Weavy/weavy-webview in your Xamarin app to integrate with Weavy!
+
 # Weavy Messenger Mobile
 Weavy Messenger Mobile is a Xamarin Forms hybrid app targeting both the Android and iOS platforms. This repository was created as a boiler plate to allow developers of the Weavy platform to easily get up and running with mobile development.
 
